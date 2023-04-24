@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#Data Files
+*.mp3
+*.wav
+*.flac
+
 # C extensions
 *.so
 
