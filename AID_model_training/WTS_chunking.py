@@ -144,6 +144,7 @@ import shutil, os
 import pandas as pd
 import numpy as np
 
+
 def extact_split(df, chunk_len=3):
     def gen_list(a, b, chunk):
         # generate multiples of 3 between a and b
