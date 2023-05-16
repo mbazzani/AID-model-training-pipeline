@@ -22,10 +22,10 @@ import pandas as pd
 import sklearn.metrics
 
 #TODO Fix this
-device ='cpu'# 'cuda' if torch.cuda.is_available() else 'cpu'
+device ='cuda' if torch.cuda.is_available() else 'cpu'
 loss_print_freq = 50 
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser() 
 parser.add_argument('-e', '--epochs', default=10, type=int)
 parser.add_argument('-nf', '--num_fold', default=5, type=int)
 parser.add_argument('-nc', '--num_classes', default=264, type=int)
@@ -104,6 +104,8 @@ def train(model,
     for epoch in range(10):
         for i, data in enumerate(data_loader):
             inputs, labels = data
+            inputs = inputs.to(device)
+            labels = labels.to(device)
     
             optimizer.zero_grad()
     
@@ -196,6 +198,7 @@ if __name__ == '__main__':
     model = BirdCLEFModel(CONFIG=CONFIG).to(device)
     optimizer = Adam(model.parameters(), lr=1e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, eta_min=1e-5, T_max=10)
+    model = model.to(device)
     print("Model / Optimizer Loading Succesful :P")
 
     print("Loading Dataset")
