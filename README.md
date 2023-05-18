@@ -1,5 +1,21 @@
-# python-repo-example
-Example Python Package Repository.  This repository serves as an example of how to set up a Python repository for UCSD Engineers for Exploration.
+## Description
+This repo is meant to facilitate model training for the Acoustic Species ID project, and allow for rapid, iterative testing of different data and models.
+
+## Usage:
+To train the current model (efficientnet4), simply run the model_training.py file. 
+
+## Dataset Conventions
+Datasets are stored in the `datasets` folder. If `[dataset]` represents the name of the dataset, then paths to training data are in the following format: `datasets/[dataset]/[dataset]_[descriptor]/`. For example, one possible path is `datasets/cosmos/cosmos_chunked/`. Within every 
+such folder, there will be several audio clips of training data, as well as a `labels.csv` file containing the corresponding labels for each file.
+
+## Changing Datasets
+To change the dataset, simply change the `DATASET` variable in the `config.py` file. If the path to the dataset does not already exist, you will have to create it, and place the data/labels in `datasets/[dataset]/[dataset]_original/`. You will also need to change `TRAINING_DATA_DIR` to correspond to the new data you want to train on. If this data does not exist yet, then you will have to create it as well (will be automated eventually!). To create chunked data, run `create_chunked_data()` from `training_data_processing.py`
+
+## Changing Training Parameters
+Training parameters such as batch size and learning rate can be passed as command line arguments to the `model_training.py` file. 
+
+## Changing Models
+To change models, it should be sufficient to edit the `model.py` file. As long as your model has the same name, input size, and output size it should work out of the box. If the model name is changed, then the code in `model_training.py` must be changed to call the new name.
 
 ## .vscode
 This folder should contain at least a `launch.json` file that provides entry points into the package.  This could be entry points to example programs, typical debug entry points, etc.  Ideally, this will also contain a `settings.json` with folder specific VS Code settings.
@@ -20,9 +36,6 @@ Jupyter Notebooks are a great way to add interactive reports or documentation.  
 This is created by going to `File`->`Save Workspace As` in VS Code.  This allows us to easily open the same development environment across computers and operating systems.  Use this as the root of your development environment.
 
 You'll also notice here that there are some recommended extensions.  This allows everyone on your team to have a consistent toolchain for how to interact with your code.  See https://code.visualstudio.com/docs/editor/extension-marketplace#_workspace-recommended-extensions for instructions for how to configure these.
-
-## README.md
-This is a critical file to include.  This should be an introduction to your repository.  It should be a birds-eye view of what your repo is and how to use it, with links to the appropriate lower-level documentation.
 
 ## setup.py
 This is the original way to package Python projects, which we probably still prefer.  However, in general, if you can, you should probably start using the newer packaging tools (`pyproject.toml`)
