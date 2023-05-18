@@ -44,14 +44,23 @@ def split_clips_into_chunks(original_clips_df, chunked_df):
         else:
             continue
 
-        for i, row in current_chunks_df.iterrows():
-            chunk_start = int(row["OFFSET"]*sample_rate)
-            chunk_end = int(chunk_start + cfg.CHUNK_LENGTH*sample_rate)
-            chunk_signal = full_clip_signal[chunk_start:chunk_end]
-            soundfile.write(cfg.CHUNKED_DATA_DIR/row["NEW NAME"], 
-                            chunk_signal, 
-                            sample_rate)
+        current_chunks_df.apply(lambda row: write_chunks(row, full_clip_signal), 
+                                axis=1)
+        #for i, row in current_chunks_df.iterrows():
+        #    chunk_start = int(row["OFFSET"]*sample_rate)
+        #    chunk_end = int(chunk_start + cfg.CHUNK_LENGTH*sample_rate)
+        #    chunk_signal = full_clip_signal[chunk_start:chunk_end]
+        #    soundfile.write(cfg.CHUNKED_DATA_DIR/row["NEW NAME"], 
+        #                    chunk_signal, 
+        #                    sample_rate)
 
+def write_chunks(row, full_clip_signal):
+    chunk_start = int(row["OFFSET"]*cfg.SAMPLE_RATE)
+    chunk_end = int(chunk_start + cfg.CHUNK_LENGTH*cfg.SAMPLE_RATE)
+    chunk_signal = full_clip_signal[chunk_start:chunk_end]
+    soundfile.write(cfg.CHUNKED_DATA_DIR/row["NEW NAME"], 
+                    chunk_signal, 
+                    cfg.SAMPLE_RATE)
 
 # Takes the and generates a dataframe of path names
 # for chunked clips from it
@@ -103,13 +112,10 @@ def load_clip(clip_path, verbose = False):
         signal = signal.sum(axis=1) / 2
 
     signal = np.array(signal)
-    #This is hacky, need to figure out why some clips are shorter
-    #in the first place
-    #print("Loaded clip: " + str(signal))
-    #print("Loaded clip len: " + str(len(signal)))
 
+    #This is hacky, need to figure out why some clips are shorter
+    #TODO, why is this happening?
     if len(signal)<cfg.SAMPLE_RATE*cfg.CHUNK_LENGTH:
-        print("RETURNED NONE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         return None
 
 
