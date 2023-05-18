@@ -1,16 +1,24 @@
 from pathlib import Path
 
 DATASET = "cosmos"
-LABELS_FILE = "labels.csv"
-SAMPLE_RATE = 44100
-CHUNK_LENGTH = 5 #seconds
-FFT_SIZE = 1024
-NUM_MEL_FILTERBANKS = 224
 
+# Path conventions, probably don't change unless we are completely
+# changing conventions
+LABELS_FILE = "labels.csv"
 DATASET_DIR = Path.cwd().parent/"datasets"/DATASET
 ORIGINAL_DATA_DIR = DATASET_DIR/(DATASET+"_original")
 CHUNKED_DATA_DIR = DATASET_DIR/(DATASET+"_chunked")
+
+
 TRAINING_DATA_DIR = CHUNKED_DATA_DIR
+SAMPLE_RATE = 44100
+
+# If this is changed, the existing CHUNKED_DATA_DIR must be deleted
+CHUNK_LENGTH = 5 #seconds
+
+
+FFT_SIZE = 1024
+NUM_MEL_FILTERBANKS = 224
 
 
 LABEL_MAP = {
