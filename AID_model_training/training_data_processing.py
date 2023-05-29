@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-import config as cfg
+import os
+import soundfile
+import librosa
+import scipy.signal
 import pandas as pd
 import numpy as np
+import config as cfg
 import WTS_chunking
-import librosa
-import soundfile
-import scipy.signal
-import os
 
 
 def create_chunked_data():
@@ -74,7 +74,7 @@ def generate_chunked_df(original_clips_df):
 # they came from and their position in it
 def update_names(chunked_df):
     # Doesn't work with pandas 2.0 for some reason? Needs version <=1.5.3
-    chunked_df[["FILE NAMES", "FILE EXTENSIONS"]] = chunked_df["IN FILE"].str.split(
+    chunked_df[["FILE NAMES", "FILE EXTENSIONS"]] = chunked_df["IN FILE"].str.rsplit(
         pat=".", n=1, expand=True
     )
 

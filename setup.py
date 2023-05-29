@@ -13,10 +13,11 @@ setup(
         "torch==2.0.0",
         "torchaudio==2.0.1",
         "torchvision==0.15.1",
-        "pandas==1.5.3",
+        "pandas==2.0.1",
         "librosa==0.10.0.post2",
         "scipy==1.10.1",
-        "soundfile==0.12.1" "matplotlib==3.7.1",
+        "soundfile==0.12.1",
+        "matplotlib==3.7.1",
     ],
     extras_require={
         "dev": [
