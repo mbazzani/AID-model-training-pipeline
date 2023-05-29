@@ -25,7 +25,10 @@ Datasets are stored in the `datasets` folder. If `[dataset]` represents the name
 such folder, there will be several audio clips of training data, as well as a `labels.csv` file containing the corresponding labels for each file.
 
 ## Changing Datasets
-To change the dataset, simply change the `DATASET` variable in the `config.py` file. If the path to the dataset does not already exist, you will have to create it, and place the data/labels in `datasets/[dataset]/[dataset]_original/`. You will also need to change `TRAINING_DATA_DIR` to correspond to the new data you want to train on. If this data does not exist yet, then you will have to create it as well (will be automated eventually!). To create chunked data, run `create_chunked_data()` from `training_data_processing.py`
+To change the dataset, simply change the `DATASET` variable in the `config.py` file. If the path to the dataset does not already exist, you will have to create it, and place the data/labels in `datasets/[dataset]/[dataset]_original/`. Then, run `create_chunked_data()` from `training_data_processing.py`
+
+## Changing Chunk Lengths
+To change the chunk length, simply change the `CHUNK_LENGTH` variable in the `config.py` file. Then, remove the directory `datasets/[dataset]/[dataset]_chunked/`, and run `create_chunked_data()` from `training_data_processing.py`
 
 ## Changing Training Parameters
 Training parameters such as batch size and learning rate can be passed as command line arguments to the `model_training.py` file. 
