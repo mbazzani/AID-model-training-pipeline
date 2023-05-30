@@ -2,7 +2,7 @@
 import sklearn.metrics
 import pandas as pd
 import config as cfg
-from test_model import BirdCLEFModel
+from model import BirdCLEFModel
 from datasets import BirdSoundDataset, get_datasets
 import torch
 import torch.nn as nn
@@ -153,6 +153,8 @@ def set_seed():
 
 if __name__ == '__main__':
     CONFIG = parser.parse_args()
+    print("Config: ", CONFIG)
+    print(type(CONFIG))
     set_seed()
     print("Loading Model...")
     model = BirdCLEFModel(CONFIG=CONFIG).to(device)
