@@ -153,8 +153,8 @@ def set_seed():
 
 if __name__ == '__main__':
     CONFIG = parser.parse_args()
-    print("Config: ", CONFIG)
-    print(type(CONFIG))
+    # Add commandline arguments to config file
+    cfg.__dict__.update(CONFIG.__dict__)
     set_seed()
     print("Loading Model...")
     model = BirdCLEFModel(CONFIG=CONFIG).to(device)
