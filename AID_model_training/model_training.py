@@ -4,6 +4,7 @@ import pandas as pd
 import config as cfg
 from model import BirdCLEFModel
 from datasets import BirdSoundDataset, get_datasets
+import augmentations
 import torch
 import torch.nn as nn
 from torch.optim import Adam
@@ -154,6 +155,7 @@ def set_seed():
 if __name__ == '__main__':
     CONFIG = parser.parse_args()
     # Add commandline arguments to config file
+    # TODO centralize to make this more consistent
     cfg.__dict__.update(CONFIG.__dict__)
     set_seed()
     print("Loading Model...")
@@ -165,6 +167,7 @@ if __name__ == '__main__':
     print("Model / Optimizer Loading Succesful")
 
     print("Loading Dataset")
+    # Issue: This method applies data augmentations to val dataset, need to fix
     train_dataset, val_dataset = get_datasets(cfg.TRAINING_DATA_DIR/cfg.LABELS_FILE,
                                               cfg.TRAINING_DATA_DIR,
                                               device)

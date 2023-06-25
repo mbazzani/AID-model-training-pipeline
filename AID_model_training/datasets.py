@@ -9,14 +9,18 @@ import config as cfg
 
 
 class BirdSoundDataset(Dataset):
-    def __init__(self, labels_file, audio_dir, transform=None, target_transform=None):
+    def __init__(self, 
+                 labels_file, 
+                 audio_dir, 
+                 augmentations={"audio": [], "spectrogram": []}, 
+                 target_transform=None):
         labels_df = pd.read_csv(labels_file)
         self.audio_labels = labels_df[["NEW NAME", "MANUAL ID"]]
         self.audio_labels["MANUAL ID"] = self.audio_labels["MANUAL ID"].map(
             cfg.LABEL_MAP
         )
         self.audio_dir = audio_dir
-        self.transform = transform
+        self.augmentations = augmentations
         self.target_transform = target_transform
 
     def __len__(self):
@@ -29,10 +33,16 @@ class BirdSoundDataset(Dataset):
 
         clip_path = os.path.join(
             self.audio_dir, self.audio_labels.iloc[index, 0])
+
         clip = data_processing.load_clip(clip_path)
+
         if clip is None:
             return None
+
         clip, _ = clip
+        for augmentation in self.augmentations["audio"]:
+            self.clip = augmentation(clip)
+                
         mel_spectrogram = audtr.MelSpectrogram(
             sample_rate=cfg.SAMPLE_RATE,
             n_mels=cfg.NUM_MEL_FILTERBANKS,
@@ -41,18 +51,19 @@ class BirdSoundDataset(Dataset):
         # Should be a tensor with size batch_size, num_samples
         clip = mel_spectrogram(torch.tensor(clip))
         clip = torch.stack([clip, clip, clip])
+        for augmentation in self.augmentations["spectrogram"]:
+            self.clip = augmentation(clip)
 
         label = self.audio_labels.iloc[index, 1]
 
-        if self.transform:
-            clip = self.transform
         if self.target_transform:
             label = self.target_transform(label)
         return clip, label
 
 
+
 def get_datasets(labels_file, audio_dir, device):
-    data = BirdSoundDataset(labels_file, audio_dir)
+    data = BirdSoundDataset(labels_file, audio_dir, augmentations = cfg.AUGMENTATIONS)
     valid_indices = [i for i in range(len(data)) if data[i] is not None]
     valid_dataset = torch.utils.data.Subset(data, valid_indices)
     train_data, val_data = torch.utils.data.random_split(

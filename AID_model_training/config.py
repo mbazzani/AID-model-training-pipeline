@@ -1,4 +1,5 @@
 from pathlib import Path
+import augmentations
 
 DATASET = "cosmos"
 
@@ -13,13 +14,12 @@ CHUNKED_DATA_DIR = DATASET_DIR / (DATASET + "_chunked")
 TRAINING_DATA_DIR = CHUNKED_DATA_DIR
 SAMPLE_RATE = 44100
 
-# If this is changed, the existing CHUNKED_DATA_DIR must be deleted
+# If this is changed, the existing CHUNKED_DATA_DIR must be deleted and regenerated
 CHUNK_LENGTH = 5  # seconds
 
-
-FFT_SIZE = 1024
-NUM_MEL_FILTERBANKS = 224
-
+#Spectrogram conversion settings
+NUM_MEL_FILTERBANKS=224
+FFT_SIZE=1024
 
 LABEL_MAP = {
     "No class of interest": 0,
@@ -37,3 +37,7 @@ LABEL_MAP = {
     "Ramphastos tucanus": 11,
     "Tolmomyias sulphurescens": 12,
 }
+
+AUGMENTATIONS = {"audio": [lambda clip: augmentations.add_noise(clip, 0.1),
+                           lambda clip: augmentations.speed_shift(clip, 1.05)],
+                 "spectrogram": []}

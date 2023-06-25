@@ -28,4 +28,4 @@ def pitch_shift(data, sampling_rate, pitch_factor):
     return librosa.effects.pitch_shift(data, sampling_rate, pitch_factor)
 
 def speed_shift(data, speed_factor):
-    return librosa.effects.time_stretch(data, speed_factor)
+    return librosa.effects.time_stretch(data, rate=speed_factor)
